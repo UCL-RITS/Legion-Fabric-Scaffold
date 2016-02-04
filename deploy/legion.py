@@ -1,5 +1,6 @@
 from fabric.api import *
 from mako.template import Template
+from contextlib import nested
 import mako
 import os
 
@@ -10,6 +11,11 @@ env.deploy_to="/home/"+env.user+"/devel/mpi-scaffold"
 env.clone_url="https://github.com/UCL-RITS/MPI-Scaffold.git"
 env.hosts=['legion.rc.ucl.ac.uk']
 
+modules = nested(
+    prefix('module load cmake'),
+    prefix('module swap compilers compilers/gnu/4.9.2'),
+    prefix('module swap mpi mpi/openmpi/1.10.1/gnu-4.9.2')
+)
 
 @task
 def cold(branch='master'):
@@ -17,28 +23,36 @@ def cold(branch='master'):
     run('mkdir -p '+env.deploy_to)
     run('mkdir -p '+env.run_at)
     with cd(env.deploy_to):
-        with prefix('module load cmake'):
-            with prefix('module swap compilers compilers/gnu/4.9.2'):
-                with prefix('module swap mpi mpi/openmpi/1.10.1/gnu-4.9.2'):
-                    run('git clone '+env.clone_url)
-                    run('mkdir MPI-Scaffold/build')
-                    with cd('MPI-Scaffold/build'):
-                        run('git checkout '+branch)
-                        run('cmake .. -DCMAKE_CXX_COMPILER=mpiCC -DCMAKE_C_COMPILER=mpicc')
-                        run('make')
-                        run('test/catch')
+        with modules:
+            run('git clone '+env.clone_url)
+            run('mkdir MPI-Scaffold/build')
+            with cd('MPI-Scaffold/build'):
+                run('git checkout '+branch)
+                run('cmake .. -DCMAKE_CXX_COMPILER=mpiCC -DCMAKE_C_COMPILER=mpicc')
+                run('make')
+                run('test/catch')
 
 @task
 def warm(branch='master'):
   with cd(env.deploy_to+'/MPI-Scaffold/build'):
-        with prefix('module load cmake'):
-            with prefix('module swap compilers compilers/gnu/4.9.2'):
-                with prefix('module swap mpi mpi/openmpi/1.10.1/gnu-4.9.2'):
-                        run('git checkout '+branch)
-                        run('git pull')
-                        run('cmake ..')
-                        run('make')
-                        run('test/catch')
+    with modules:
+        run('git checkout '+branch)
+        run('git pull')
+        run('cmake ..')
+        run('make')
+        run('test/catch')
+
+@task
+def patch():
+  with cd(env.deploy_to+'/MPI-Scaffold'):
+    local('git diff > patch.diff')
+    put('patch.diff','patch.diff')
+    with modules:
+        run('git apply patch.diff')
+        with cd('build'):
+            run('cmake ..')
+            run('make')
+            run('test/catch')
 
 @task
 def sub(processes=4):
