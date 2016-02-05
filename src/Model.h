@@ -11,7 +11,8 @@ public:
     __host__ __device__ int calculate();
 };
 
-//Because linked-libraries for Cuda objects don't work for Cuda < 5.0
+//Because linked-libraries for Cuda objects don't work
+// for Compute Capability < 5.0
 // (the latest Maxwell architecture launched this year)
 // we need to directly include the model definition code as well as the header
 #include "Model.cu"
