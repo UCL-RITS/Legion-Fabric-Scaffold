@@ -12,7 +12,7 @@ git clone https://github.com/UCL-RITS/Legion-Fabric-Scaffold.git
 cd Legion-Fabric-Scaffold
 edit buildme.sh and subme.sh with your userid instead of mine
 ./buildme.sh
-./subme.sh
+qsub subme.sh
 ```
 
 ## Running via fabric
