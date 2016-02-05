@@ -13,7 +13,7 @@ cd Legion-Fabric-Scaffold
 git checkout gpu
 edit buildme.sh and subme.sh with your userid instead of mine
 ./buildme.sh
-./subme.sh
+qsub subme.sh
 ```
 
 ## Running via fabric
