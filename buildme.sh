@@ -7,5 +7,3 @@ cd build
 cmake ..
 make
 test/catch
-test/catch_cuda
-src/cuda_example
