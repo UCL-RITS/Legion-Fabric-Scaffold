@@ -10,7 +10,7 @@ env.user='ucgajhe'
 
 env.run_at="/home/"+env.user+"/Scratch/Scaffold/output"
 env.deploy_to="/home/"+env.user+"/devel/mpi-scaffold"
-env.clone_url="https://github.com/UCL-RITS/MPI-Scaffold.git"
+env.clone_url="https://github.com/UCL-RITS/Legion-Fabric-Scaffold.git"
 env.hosts=['legion.rc.ucl.ac.uk']
 
 modules = nested(
@@ -26,8 +26,8 @@ def cold(branch='omp'):
     with cd(env.deploy_to):
         with modules:
             run('git clone '+env.clone_url)
-            run('mkdir MPI-Scaffold/build')
-            with cd('MPI-Scaffold/build'):
+            run('mkdir Legion-Fabric-Scaffold/build')
+            with cd('Legion-Fabric-Scaffold/build'):
                 run('git checkout '+branch)
                 run('cmake .. ')
                 run('make')
@@ -35,7 +35,7 @@ def cold(branch='omp'):
 
 @task
 def warm(branch='omp'):
-  with cd(env.deploy_to+'/MPI-Scaffold/build'):
+  with cd(env.deploy_to+'/Legion-Fabric-Scaffold/build'):
     with modules:
         run('git checkout '+branch)
         run('git pull')
@@ -45,7 +45,7 @@ def warm(branch='omp'):
 
 @task
 def patch():
-  with cd(env.deploy_to+'/MPI-Scaffold'):
+  with cd(env.deploy_to+'/Legion-Fabric-Scaffold'):
     local('git diff > patch.diff')
     put('patch.diff','patch.diff')
     with modules:
