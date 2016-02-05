@@ -24,7 +24,7 @@ def grace():
     env.hosts=['grace.rc.ucl.ac.uk']
 
 @task
-def cold(branch='master'):
+def cold(branch='gpu'):
     run('rm -rf '+env.deploy_to)
     run('mkdir -p '+env.deploy_to)
     run('mkdir -p '+env.run_at)
@@ -39,7 +39,7 @@ def cold(branch='master'):
                 run('test/catch')
 
 @task
-def warm(branch='master'):
+def warm(branch='gpu'):
   with cd(env.deploy_to+'/MPI-Scaffold/build'):
     with modules:
         run('git checkout '+branch)
