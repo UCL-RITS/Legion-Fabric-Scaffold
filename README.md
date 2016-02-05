@@ -23,7 +23,7 @@ pip install fabric # You need a working python install
 git clone https://github.com/UCL-RITS/Legion-Fabric-Scaffold.git
 cd Legion-Fabric-Scaffold
 git checkout omp
-edit legion.py with your userid instead of mine
+edit deploy/legion.py with your userid instead of mine (env.user)
 fab legion.cold
 fab legion.sub
 fab legion.wait
