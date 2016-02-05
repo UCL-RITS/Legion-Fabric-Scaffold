@@ -2,6 +2,7 @@
 #include "helpers.h"
 #include "Model.h"
 
+
 __global__ void map (int * results);
 
 const int thread_count=32;

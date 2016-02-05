@@ -2,7 +2,7 @@
 
 #include "Model.h"
 
-Model::Model(
+__host__ __device__ Model::Model(
         int rank,
         int block_size)
     :
@@ -11,6 +11,6 @@ Model::Model(
 {
 }
 
-__device__ int Model::calculate(){
+__host__ __device__ int Model::calculate(){
   return rank*rank;
 }

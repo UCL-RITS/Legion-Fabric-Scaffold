@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(MPI_Scaffold)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(CUDA)
-set(CUDA_NVCC_FLAGS -arch sm_20)
+set(CUDA_NVCC_FLAGS -arch sm_35)
 include_directories(src)
 include_directories(lib)
 
