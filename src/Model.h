@@ -4,7 +4,7 @@
 class Model {
 private:
     int rank;
-    int mpi_size;
+    int size;
 public:
     Model(int rank, int size);
     int reduceRanks();

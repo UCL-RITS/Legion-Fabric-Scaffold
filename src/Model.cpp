@@ -1,28 +1,14 @@
 #include <iostream>
 
 #include "Model.h"
-#include <mpi.h>
 
-Model::Model(
-        int rank,
-        int mpi_size)
+Model::Model(int threads)
     :
     rank(rank),
-    mpi_size(mpi_size)
+    size(size)
 {
-  std::cout << "Rank " << rank << " of " << mpi_size << std::endl;
-
-  std::cout << "Sum of all ranks: " << reduceRanks() << std::endl;
 }
 
-int Model::reduceRanks(){
-  int result;
-  MPI_Allreduce(
-    &rank,
-    &result,
-    1,
-    MPI_INTEGER,
-    MPI_SUM,
-    MPI_COMM_WORLD);
-  return result;
+int Model::result(){
+  return rank*rank;
 }

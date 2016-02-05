@@ -1,4 +1,4 @@
 add_executable(catch catch.cpp)
-add_executable(catch_mpi catch_mpi.cpp)
-target_link_libraries(catch modellib  ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES})
-target_link_libraries(catch_mpi modellib  ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES})
+add_executable(catch_omp catch_omp.cpp)
+target_link_libraries(catch modellib)
+target_link_libraries(catch_omp modellib)

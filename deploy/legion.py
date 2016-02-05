@@ -16,7 +16,6 @@ env.hosts=['legion.rc.ucl.ac.uk']
 modules = nested(
     prefix('module load cmake'),
     prefix('module swap compilers compilers/gnu/4.9.2'),
-    prefix('module swap mpi mpi/openmpi/1.10.1/gnu-4.9.2')
 )
 
 @task
@@ -30,7 +29,7 @@ def cold(branch='master'):
             run('mkdir MPI-Scaffold/build')
             with cd('MPI-Scaffold/build'):
                 run('git checkout '+branch)
-                run('cmake .. -DCMAKE_CXX_COMPILER=mpiCC -DCMAKE_C_COMPILER=mpicc')
+                run('cmake .. ')
                 run('make')
                 run('test/catch')
 
