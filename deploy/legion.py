@@ -20,10 +20,6 @@ modules = nested(
 )
 
 @task
-def grace():
-    env.hosts=['grace.rc.ucl.ac.uk']
-
-@task
 def cold(branch='gpu'):
     run('rm -rf '+env.deploy_to)
     run('mkdir -p '+env.deploy_to)
