@@ -14,8 +14,12 @@ env.hosts=['legion.rc.ucl.ac.uk']
 modules = nested(
     prefix('module load cmake'),
     prefix('module swap compilers compilers/gnu/4.9.2'),
-    prefix('module swap mpi mpi/openmpi/1.10.1/gnu-4.9.2')
+    prefix('module load cuda/7.5.18/gnu-4.9.2')
 )
+
+@task
+def grace():
+    env.hosts=['grace.rc.ucl.ac.uk']
 
 @task
 def cold(branch='master'):
@@ -28,7 +32,7 @@ def cold(branch='master'):
             run('mkdir MPI-Scaffold/build')
             with cd('MPI-Scaffold/build'):
                 run('git checkout '+branch)
-                run('cmake .. -DCMAKE_CXX_COMPILER=mpiCC -DCMAKE_C_COMPILER=mpicc')
+                run('cmake .. ')
                 run('make')
                 run('test/catch')
 
@@ -48,6 +52,7 @@ def patch():
     local('git diff > patch.diff')
     put('patch.diff','patch.diff')
     with modules:
+        run('git checkout .')
         run('git apply patch.diff')
         with cd('build'):
             run('cmake ..')

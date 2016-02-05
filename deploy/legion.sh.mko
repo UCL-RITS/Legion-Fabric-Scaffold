@@ -3,10 +3,10 @@
 #$ -P RCSoftDev
 #$ -l h_rt=0:0:30
 #$ -N MPIExample
-#$ -pe mpi ${processes}
+#$ -l gpu=1
 #$ -wd ${run_at}
+#$ -ac allow="P"
 module unload compilers
-module unload mpi
 module load compilers/gnu/4.9.2
-module load mpi/openmpi/1.10.1/gnu-4.9.2
-gerun ${deploy_to}/MPI-Scaffold/build/src/mpi_example
+module load cuda/7.5.18/gnu-4.9.2
+gerun ${deploy_to}/MPI-Scaffold/build/src/cuda_example

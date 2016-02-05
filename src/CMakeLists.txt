@@ -1,3 +1,3 @@
-add_executable(mpi_example parallel_main.cpp )
-add_library(modellib Model.cpp)
-target_link_libraries(mpi_example modellib  ${MPI_C_LIBRARIES} ${MPI_CXX_LIBRARIES})
+cuda_add_executable(cuda_example cuda_main.cu )
+cuda_add_library(modellib Model.cpp helpers.cu)
+target_link_libraries(cuda_example modellib)

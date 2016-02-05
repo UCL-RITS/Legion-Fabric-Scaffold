@@ -4,10 +4,10 @@
 class Model {
 private:
     int rank;
-    int mpi_size;
+    int block_size;
 public:
     Model(int rank, int size);
-    int reduceRanks();
+    int getRank();
 };
 
 #endif // ONCE_MODEL_H
