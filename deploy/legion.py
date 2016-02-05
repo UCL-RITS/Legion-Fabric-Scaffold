@@ -9,7 +9,7 @@ import os
 env.user='ucgajhe'
 
 env.run_at="/home/"+env.user+"/Scratch/Scaffold/output"
-env.deploy_to="/home/"+env.user+"/devel/mpi-scaffold"
+env.deploy_to="/home/"+env.user+"/devel/omp-scaffold"
 env.clone_url="https://github.com/UCL-RITS/Legion-Fabric-Scaffold.git"
 env.hosts=['legion.rc.ucl.ac.uk']
 
