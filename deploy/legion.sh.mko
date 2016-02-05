@@ -9,4 +9,4 @@
 module unload compilers
 module load compilers/gnu/4.9.2
 module load cuda/7.5.18/gnu-4.9.2
-gerun ${deploy_to}/MPI-Scaffold/build/src/cuda_example
+${deploy_to}/MPI-Scaffold/build/src/cuda_example
