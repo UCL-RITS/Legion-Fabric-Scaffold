@@ -59,4 +59,23 @@ TEST_CASE ("CUDA Tests"){
         REQUIRE(host_results[i]==i);
       }
     }
+
+    SECTION("Thrust dispatch works"){
+
+      const int thread_count=32;
+      thrust::device_vector<int> device_results(thread_count);
+
+    	thrust::generate(device_results.begin(), device_results.end(),
+    		[]__device__() {
+    			return threadIdx.x;
+    		} );
+
+      thrust::host_vector<int> host_results(thread_count);
+
+      host_results=device_results;
+
+      for (unsigned int i=0; i<thread_count; i++) {
+        REQUIRE(host_results[i]==i);
+      }
+    }
 }
