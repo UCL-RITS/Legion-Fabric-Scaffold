@@ -2,7 +2,7 @@
 
 #include "Model.h"
 
-Model::Model(int threads)
+Model::Model(int rank, int size)
     :
     rank(rank),
     size(size)

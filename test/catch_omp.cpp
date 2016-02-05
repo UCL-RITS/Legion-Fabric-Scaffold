@@ -14,11 +14,23 @@ int main(int argc, char * argv[]) {
 
 
 TEST_CASE ("MPI Tests"){
-    int rank, size;
 
-    REQUIRE(size==2); // test designed for a two-process situation
-    SECTION("Basic communication works"){
-       Model model(rank,size);
-       REQUIRE(model.result()==rank*rank);
+    SECTION("Basic parallelism works"){
+
+      int thread_count=32;
+      int result;
+      int sum;
+
+      #pragma omp parallel private(result), reduction(+:sum)
+      {
+         #pragma omp for
+         for (int i = 0; i < thread_count; ++i)
+         {
+             Model model(i, thread_count);
+             result = model.result();
+             sum = sum+result;
+         }
+      }
+      REQUIRE (sum == 10416);
     }
 }

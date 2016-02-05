@@ -1,25 +1,24 @@
 #include "Model.h"
-
-#include <mpi.h>
+#include <omp.h>
 #include <iostream>
 
 int main(int argc, char **argv){
 
-  int rank, size;
-
-
-  Model model(rank, size);
-  int local_result = model.result();
+  int thread_count=32;
   int result;
+  int sum;
 
-  MPI_Allreduce(
-    &local_result,
-    &result,
-    1,
-    MPI_INTEGER,
-    MPI_SUM,
-    MPI_COMM_WORLD);
+  #pragma omp parallel private(result), reduction(+:sum)
+  {
+     #pragma omp for
+     for (int i = 0; i < thread_count; ++i)
+     {
+         Model model(i, thread_count);
+         result = model.result();
+         sum = sum+result;
+     }
+  }
 
-  std::cout << "Final result" << result << std::endl;
+  std::cout << "Final result" << sum << std::endl;
 
 }
