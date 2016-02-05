@@ -20,9 +20,7 @@ int main(int argc, char **argv){
   thrust::device_vector<int> device_total(1);
 
   host_total = thrust::reduce(results.begin(), results.end(), 0,
-		[]__device__(int a, int b){
-			return a+b;
-		}
+		thrust::plus<int>()
 	);
 
   printf("Final Result: %i\n", host_total);
