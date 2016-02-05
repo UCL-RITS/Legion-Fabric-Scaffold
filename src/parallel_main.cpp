@@ -19,6 +19,7 @@ int main(int argc, char **argv){
      }
   }
 
-  std::cout << "Final result" << sum << std::endl;
+    std::cout << "Final result on thread " <<
+      omp_get_thread_num() << " is " << sum << std::endl;
 
 }
