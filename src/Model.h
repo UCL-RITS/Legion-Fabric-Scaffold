@@ -7,7 +7,7 @@ private:
     int block_size;
 public:
     Model(int rank, int size);
-    int getRank();
+    __device__ int calculate();
 };
 
 #endif // ONCE_MODEL_H

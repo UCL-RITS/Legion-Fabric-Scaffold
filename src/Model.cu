@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "Model.h"
-#include <mpi.h>
 
 Model::Model(
         int rank,
@@ -12,6 +11,6 @@ Model::Model(
 {
 }
 
-int Model::getRank(){
-  return rank;
+__device__ int Model::calculate(){
+  return rank*rank;
 }
