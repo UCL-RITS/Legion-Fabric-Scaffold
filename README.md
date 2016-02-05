@@ -1,4 +1,4 @@
-# MPI-Scaffold
+# OMP-Scaffold
 Scaffold for a CMake Fabric project for Legion
 
 ## Running with ssh
