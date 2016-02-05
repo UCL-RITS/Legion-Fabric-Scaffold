@@ -7,7 +7,7 @@ private:
     int mpi_size;
 public:
     Model(int rank, int size);
-    int reduceRanks();
+    int result();
 };
 
 #endif // ONCE_MODEL_H
