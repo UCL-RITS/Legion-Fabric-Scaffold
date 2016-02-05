@@ -1,4 +1,4 @@
-# MPI-Scaffold
+# GPU-Scaffold
 Scaffold for a CMake Fabric project for Legion
 
 ## Running with ssh
