@@ -2,7 +2,6 @@ from fabric.api import *
 from mako.template import Template
 from contextlib import nested
 import mako
-import re
 import time
 import os
 
@@ -72,12 +71,12 @@ def sub(processes=4):
 
 @task
 def stat():
-    return run('qstat')
+    run('qstat')
 
 @task
 def wait():
   """Wait until all jobs currently qsubbed are complete, then return"""
-  while re.search("out",stat()):
+  while "job-ID" in run('qstat'):
 	time.sleep(10)
 
 @task
