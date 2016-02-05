@@ -7,6 +7,7 @@ Model::Model(int threads)
     rank(rank),
     size(size)
 {
+
 }
 
 int Model::result(){

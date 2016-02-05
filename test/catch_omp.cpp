@@ -19,6 +19,6 @@ TEST_CASE ("MPI Tests"){
     REQUIRE(size==2); // test designed for a two-process situation
     SECTION("Basic communication works"){
        Model model(rank,size);
-       REQUIRE(model.reduceRanks()==1);
+       REQUIRE(model.result()==rank*rank);
     }
 }
