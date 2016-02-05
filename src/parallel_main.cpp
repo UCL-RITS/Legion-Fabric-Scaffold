@@ -5,8 +5,8 @@
 int main(int argc, char **argv){
 
   int thread_count=32;
-  int result;
-  int sum;
+  int result=0;
+  int sum=0;
 
   #pragma omp parallel private(result), reduction(+:sum)
   {
@@ -17,9 +17,11 @@ int main(int argc, char **argv){
          result = model.result();
          sum = sum+result;
      }
+
+     std::cout << "Final result on thread " <<
+       omp_get_thread_num() << " is " << sum << std::endl;
   }
 
-    std::cout << "Final result on thread " <<
-      omp_get_thread_num() << " is " << sum << std::endl;
+  std::cout << "Final result is " << sum << std::endl;
 
 }
