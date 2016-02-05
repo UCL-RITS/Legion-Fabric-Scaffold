@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <thrust/device_vector.h>
+
 #include "helpers.h"
 #include "Model.h"
 
@@ -12,21 +14,18 @@ int main(int argc, char **argv){
 
 	dim3 tpb(thread_count,1,1);
 
-  int* results=0;
-  int* device_total=0;
   int host_total=0;
 
-  handle_error(cudaMalloc( &results,
-      thread_count*sizeof( int ) ), "Allocate device samples");
+  thrust::device_vector<int> results(thread_count);
+  thrust::device_vector<int> device_total(1);
 
-  handle_error(cudaMalloc( &device_total,
-      sizeof(int)), "Allocate result");
+  map <<< 1, tpb >>> (thrust::raw_pointer_cast(&results[0]));
 
-  map <<< 1, tpb >>> (results);
-  reduce_add <<< 1, tpb, tpb.x >>> (results, device_total);
+  reduce_add <<< 1, tpb, tpb.x >>> (
+          thrust::raw_pointer_cast(&results[0]),
+          thrust::raw_pointer_cast(&device_total[0]));
 
-  handle_error(cudaMemcpy(&host_total,
-      device_total, sizeof(int), cudaMemcpyDeviceToHost), "Retrieve result");
+  host_total = device_total[0];
 
   printf("Final Result: %i\n", host_total);
 

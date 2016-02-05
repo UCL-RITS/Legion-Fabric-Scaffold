@@ -1,6 +1,7 @@
 // Next line tells CATCH we will use our own main function
 #define CATCH_CONFIG_RUNNER
 #include <cmath>
+#include <thrust/device_vector.h>
 #include "catch.hpp"
 #include "Model.h"
 #include "helpers.h"
@@ -35,6 +36,24 @@ TEST_CASE ("CUDA Tests"){
       handle_error(cudaMemcpy(&host_results,
           device_results, sizeof(int)*thread_count,
           cudaMemcpyDeviceToHost), "Retrieve result");
+
+      for (unsigned int i=0; i<thread_count; i++) {
+        REQUIRE(host_results[i]==i);
+      }
+    }
+
+    SECTION("Thrust pointer cuda dispatch works"){
+
+
+      const int thread_count=32;
+      dim3 tpb(thread_count,1,1);
+
+      thrust::device_vector<int> device_results(thread_count);
+      thrust::host_vector<int> host_results(thread_count);
+
+      threadnumber <<< 1, tpb >>> (thrust::raw_pointer_cast(&device_results[0]));
+
+      host_results=device_results;
 
       for (unsigned int i=0; i<thread_count; i++) {
         REQUIRE(host_results[i]==i);
