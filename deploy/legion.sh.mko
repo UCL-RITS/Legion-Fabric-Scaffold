@@ -7,4 +7,4 @@
 #$ -wd ${run_at}
 module unload compilers
 module load compilers/gnu/4.9.2
-${deploy_to}/Legion-Fabric-Scaffold/build/src/omp_example
+time ${deploy_to}/Legion-Fabric-Scaffold/build/src/omp_example
