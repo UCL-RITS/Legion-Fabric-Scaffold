@@ -6,5 +6,4 @@ cd build
 cmake ..
 make
 test/catch
-test/catch_omp
-src/omp_example
+cd ..
