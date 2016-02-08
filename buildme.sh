@@ -7,3 +7,4 @@ cd build
 cmake ..
 make
 test/catch
+cd ..
