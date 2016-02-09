@@ -18,8 +18,11 @@ int main(int argc, char **argv){
          sum = sum+result;
      }
 
-     std::cout << "Final result on thread " <<
-       omp_get_thread_num() << " is " << sum << std::endl;
+     # pragma omp critical
+     {
+       std::cout << "Final result on thread " <<
+         omp_get_thread_num() << " is " << sum << std::endl;
+     }
   }
 
   std::cout << "Final result is " << sum << std::endl;
