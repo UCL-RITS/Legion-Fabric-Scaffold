@@ -16,6 +16,6 @@ int main(int argc, char * argv[]) {
 TEST_CASE( "Model can be instantiated and configured", "[Model]" ) {
 
     SECTION( "Model can be constructed" ) {
-        Model model(0,1);
+
     }
 }

@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
-project(MPI_Scaffold)
+project(OpenCL_Scaffold)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-find_package(CUDA)
-
-list(APPEND CUDA_NVCC_FLAGS -arch sm_35;-std=c++11;--expt-extended-lambda)
+find_package(OpenCL)
+include_directories(${OpenCL_INCLUDE_DIRS})
+link_directories(${OpenCL_LIBRARY})
+set(CMAKE_CXX_FLAGS "-std=c++11 ")
 include_directories(src)
 include_directories(lib)
 

@@ -1,4 +1,5 @@
-cuda_add_executable(catch catch.cu)
-cuda_add_executable(catch_cuda catch_cuda.cu)
-target_link_libraries(catch modellib)
-target_link_libraries(catch_cuda modellib)
+add_executable (catch_cl catch.cpp)
+
+
+configure_file(catch_cl.cl catch_cl.cl COPYONLY)
+target_link_libraries(catch_cl cl_build ${OpenCL_LIBRARY})
