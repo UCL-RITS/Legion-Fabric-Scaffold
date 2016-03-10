@@ -19,7 +19,7 @@ modules = nested(
 )
 
 @task
-def cold(branch='gpu'):
+def cold(branch='opencl'):
     run('rm -rf '+env.deploy_to)
     run('mkdir -p '+env.deploy_to)
     run('mkdir -p '+env.run_at)
