@@ -8,7 +8,7 @@ import os
 env.user='ucgajhe'
 
 env.run_at="/home/"+env.user+"/Scratch/Scaffold/output"
-env.deploy_to="/home/"+env.user+"/devel/gpu-scaffold"
+env.deploy_to="/home/"+env.user+"/devel/opencl-scaffold"
 env.clone_url="https://github.com/UCL-RITS/Legion-Fabric-Scaffold.git"
 env.hosts=['legion.rc.ucl.ac.uk']
 
