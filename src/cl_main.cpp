@@ -11,7 +11,12 @@ int main(int argc, char **argv){
   b.SelectDevice(1);
   b.DescribeDevice();
 
-  cl_kernel mykernel = b.CompileKernel("src/kernel.cl", "map");
+  b.Header("src/Model.h", "Model.h");
+
+  b.Program("src/kernel.cl");
+  b.Program("src/Model.cl");
+
+  cl_kernel mykernel = b.CreateKernel("map");
   cl_int result;
 
   cl_uint work_count = b.GetDeviceCores(1);

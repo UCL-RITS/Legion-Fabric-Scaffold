@@ -13,8 +13,9 @@ class Builder {
     std::string GetDeviceName(cl_uint selectedDevice);
     cl_device_type GetDeviceType(cl_uint selectedDevice);
     cl_uint GetDeviceCores(cl_uint selectedDevice);
-    cl_kernel CompileKernel(const std::string &kernel_path,
-                            const std::string &kernel_name);
+    void Program(const std::string &path);
+    void Header(const std::string &path, const std::string &name);
+    cl_kernel CreateKernel(const std::string & kernel_name);
     cl_context GetContext(){ return context;}
     cl_command_queue GetQueue() {return commands;}
     void DispatchKernel(cl_kernel kernel, size_t work_count);
@@ -22,11 +23,12 @@ class Builder {
       void * source_data = NULL);
     void DeviceToHost(cl_mem device_mem, void * host_mem, size_t count);
     cl_double Profile(cl_event event);
-    
+    void BuildLog(cl_program program);
+
   private:
 
     void EnumerateDevices();
-
+    cl_program CreateProgram(const std::string &kernel_path);
 
 
     cl_int result;
@@ -39,4 +41,8 @@ class Builder {
     cl_context context;
     cl_device_id selected_device_id;
     cl_uint selected_device_index;
+
+    std::vector<cl_program> programs;
+    std::vector<cl_program> headers;
+    std::vector<std::string> header_names;
 };

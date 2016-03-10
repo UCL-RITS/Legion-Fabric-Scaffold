@@ -2,7 +2,6 @@
 #define CATCH_CONFIG_RUNNER
 
 #include "catch.hpp"
-#include "Model.h"
 #include <cmath>
 
 int main(int argc, char * argv[]) {

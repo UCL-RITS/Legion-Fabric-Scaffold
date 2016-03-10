@@ -4,6 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
+#include <ios>
 
 void Builder::EnumerateDevices(){
   cl_uint numPlatforms;
@@ -129,35 +131,74 @@ void Builder::SelectDevice(cl_uint selectedDevice){
 
 }
 
-cl_kernel Builder::CompileKernel(const std::string &kernel_path,
-                                 const std::string &kernel_name){
-    // Slurp kernel file
-    std::ifstream kernel_file(kernel_path);
-    std::stringstream buffer;
-    buffer << kernel_file.rdbuf();
-    const char * buffer_contents = buffer.str().c_str();
+cl_program Builder::CreateProgram(const std::string &kernel_path){
 
-    cl_program program = clCreateProgramWithSource(context, 1,
-      &buffer_contents, NULL, &result);
-    if(result != CL_SUCCESS) exit(5);
+   // Slurp kernel file
+   std::ifstream kernel_file(kernel_path);
 
-    result = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
-    if(result != CL_SUCCESS)
-    {
-      size_t log_length;
+   if (kernel_file.fail()) throw std::ios_base::failure("Missing file");
 
-      clGetProgramBuildInfo(program, selected_device_id, CL_PROGRAM_BUILD_LOG,
-        0, NULL, &log_length
-      );
+   std::stringstream buffer;
+   buffer << kernel_file.rdbuf() << std::flush;
 
-      char build_log[log_length];
+   const char * buffer_contents = buffer.str().c_str();
 
-      clGetProgramBuildInfo(program, selected_device_id, CL_PROGRAM_BUILD_LOG,
-          log_length, build_log, NULL);
+   cl_program program = clCreateProgramWithSource(context, 1,
+     &buffer_contents, NULL, &result);
+   if(result != CL_SUCCESS) exit(5);
+   return program;
 
-      std::cout << "Build log" << std::endl;
-      std::cout << build_log << std::endl;
+}
+
+void Builder::Program(const std::string &path){
+  cl_program program = CreateProgram(path);
+  programs.push_back(program);
+}
+
+void Builder::Header(const std::string &path, const std::string &name){
+  cl_program program = CreateProgram(path);
+  headers.push_back(program);
+  header_names.push_back(name);
+}
+
+void Builder::BuildLog(cl_program program){
+  size_t log_length;
+
+  clGetProgramBuildInfo(program, selected_device_id, CL_PROGRAM_BUILD_LOG,
+    0, NULL, &log_length
+  );
+
+  char build_log[log_length];
+
+  clGetProgramBuildInfo(program, selected_device_id, CL_PROGRAM_BUILD_LOG,
+      log_length, build_log, NULL);
+
+  std::cout << "Build log" << std::endl;
+  std::cout << build_log << std::endl;
+  throw ClException(5);
+}
+
+cl_kernel Builder::CreateKernel(const std::string &kernel_name){
+
+    std::vector<const char* > headers_buffer(headers.size());
+    std::transform(header_names.begin(),
+                   header_names.end(),
+                   headers_buffer.begin(),
+                   [](std::string &s) { return s.c_str(); });
+
+    for (auto program: programs) {
+      result = clCompileProgram(program, 0, NULL, NULL, headers.size(),
+        &headers[0], &headers_buffer[0], NULL, NULL);
+
+      if(result != CL_SUCCESS) BuildLog(program);
+
     }
+
+
+    cl_program program = clLinkProgram(context, 0, NULL, NULL, programs.size(),
+                         &programs[0],
+                          NULL, NULL, &result);
+    if(result != CL_SUCCESS) BuildLog(program);
 
     cl_kernel chol_gpu;
 

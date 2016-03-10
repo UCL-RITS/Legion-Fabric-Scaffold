@@ -9,4 +9,4 @@
 module unload compilers
 module load compilers/gnu/4.9.2
 module load cuda/7.5.18/gnu-4.9.2
-time ${deploy_to}/Legion-Fabric-Scaffold/build/src/cuda_example
+time ${deploy_to}/Legion-Fabric-Scaffold/build/src/cl_main
