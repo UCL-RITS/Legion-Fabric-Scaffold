@@ -8,7 +8,7 @@ int main(int argc, char **argv){
   int host_total=0;
 
   Builder b;
-  b.SelectDevice(1);
+  b.SelectDevice(0);
   b.DescribeDevice();
 
   b.Header("src/Model.h", "Model.h");
@@ -27,7 +27,7 @@ int main(int argc, char **argv){
   int results[work_count];
 
   // Bind buffer to kernel argument
-  result |= clSetKernelArg(mykernel, 0, sizeof(cl_mem), &outputBuffer);
+  result = clSetKernelArg(mykernel, 0, sizeof(cl_mem), &outputBuffer);
 
   b.DispatchKernel(mykernel, work_count);
 
