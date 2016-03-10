@@ -15,7 +15,9 @@ env.hosts=['legion.rc.ucl.ac.uk']
 modules = nested(
     prefix('module load cmake'),
     prefix('module swap compilers compilers/gnu/4.9.2'),
-    prefix('module load cuda/7.5.18/gnu-4.9.2')
+    prefix('module load cuda/7.5.18/gnu-4.9.2'),
+    prefix('export CUDA_PATH=/shared/ucl/apps/cuda/7.5.18/gnu-4.9.2/')
+
 )
 
 @task
@@ -29,9 +31,8 @@ def cold(branch='opencl'):
             run('mkdir Legion-Fabric-Scaffold/build')
             with cd('Legion-Fabric-Scaffold/build'):
                 run('git checkout '+branch)
-                run('cmake .. ')
+                run('cmake .. -DCMAKE_LIBRARY_PATH=$CUDA_PATH/lib64')
                 run('make')
-                run('test/catch')
 
 @task
 def warm(branch='opencl'):
@@ -39,9 +40,8 @@ def warm(branch='opencl'):
     with modules:
         run('git checkout '+branch)
         run('git pull')
-        run('cmake ..')
+        run('cmake .. -DCMAKE_LIBRARY_PATH=$CUDA_PATH/lib64')
         run('make')
-        run('test/catch')
 
 @task
 def patch():
@@ -54,7 +54,6 @@ def patch():
         with cd('build'):
             run('cmake ..')
             run('make')
-            run('test/catch')
 
 @task
 def sub(processes=4):
