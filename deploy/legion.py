@@ -34,7 +34,7 @@ def cold(branch='gpu'):
                 run('test/catch')
 
 @task
-def warm(branch='gpu'):
+def warm(branch='opencl'):
   with cd(env.deploy_to+'/Legion-Fabric-Scaffold/build'):
     with modules:
         run('git checkout '+branch)
