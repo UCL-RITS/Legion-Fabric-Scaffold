@@ -6,6 +6,8 @@
 #$ -l gpu=1
 #$ -wd ${run_at}
 #$ -ac allow="P"
+cp ${deploy_to}/Legion-Fabric-Scaffold/build/src/*.cl .
+cp ${deploy_to}/Legion-Fabric-Scaffold/build/src/Model.h .
 module unload compilers
 module load compilers/gnu/4.9.2
 module load cuda/7.5.18/gnu-4.9.2
