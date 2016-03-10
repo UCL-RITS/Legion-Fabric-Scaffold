@@ -40,7 +40,7 @@ cl_device_type Builder::GetDeviceType(cl_uint selectedDevice){
 
   if(result != CL_SUCCESS)
   {
-        throw ClException(5);
+        throw ClException(3);
   }
 
   return deviceType;
@@ -54,7 +54,7 @@ cl_uint Builder::GetDeviceCores(cl_uint selectedDevice){
 
   if(result != CL_SUCCESS)
   {
-        throw ClException(5);
+        throw ClException(4);
   }
 
   return core_count;
@@ -121,13 +121,13 @@ void Builder::SelectDevice(cl_uint selectedDevice){
   context = clCreateContext(properties, 1, &selected_device_id,
     &onOpenCLError, NULL, &result);
 
-  if(result != CL_SUCCESS) throw ClException(3);
+  if(result != CL_SUCCESS) throw ClException(6);
 
   // build command queue
   commands = clCreateCommandQueue(context,
     selected_device_id,
     commandQueueProperties, &result);
-  if(result != CL_SUCCESS) throw ClException(4);
+  if(result != CL_SUCCESS) throw ClException(7);
 
 }
 
@@ -145,7 +145,7 @@ cl_program Builder::CreateProgram(const std::string &kernel_path){
 
    cl_program program = clCreateProgramWithSource(context, 1,
      &buffer_contents, NULL, &result);
-   if(result != CL_SUCCESS) exit(5);
+   if(result != CL_SUCCESS) exit(8);
    return program;
 
 }
@@ -203,7 +203,7 @@ cl_kernel Builder::CreateKernel(const std::string &kernel_name){
     cl_kernel chol_gpu;
 
     chol_gpu = clCreateKernel(program, kernel_name.c_str(), &result);
-    if(result != CL_SUCCESS) throw ClException(7);
+    if(result != CL_SUCCESS) throw ClException(9);
 
     return chol_gpu;
 }
@@ -216,7 +216,7 @@ void Builder::DispatchKernel(cl_kernel kernel, size_t work_count){
      0, NULL, &kernelExecEvent);
 
   clWaitForEvents(1, &kernelExecEvent);
-  if(result != CL_SUCCESS) throw ClException(13);
+  if(result != CL_SUCCESS) throw ClException(10);
 
   std::cout << "Kernel completed in " << Profile(kernelExecEvent)
             << " ms" << std::endl;
@@ -236,7 +236,7 @@ cl_double Builder::Profile(cl_event event){
 cl_mem Builder::AllocateDeviceMemory(cl_mem_flags flags, size_t count,
   void * source_data){
     cl_mem data = clCreateBuffer(context, flags, count, source_data, &result);
-    if(result != CL_SUCCESS) throw ClException(8);
+    if(result != CL_SUCCESS) throw ClException(11);
     return data;
 }
 
@@ -248,7 +248,7 @@ void Builder::DeviceToHost(cl_mem device_mem, void* host_mem, size_t count){
 
   clWaitForEvents(1, &readResultsEvent);
 
-  if(result != CL_SUCCESS) throw ClException(14);
+  if(result != CL_SUCCESS) throw ClException(12);
   std::cout << "Device to Host copy took " << Profile(readResultsEvent)
             << " ms" << std::endl;
 }
