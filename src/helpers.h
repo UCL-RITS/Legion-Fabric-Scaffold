@@ -15,13 +15,6 @@ inline void CL_CALLBACK onOpenCLError(const char *errinfo,  const void *private_
               << errinfo << std::endl;
 }
 
-typedef struct DeviceDesc{
-	cl_device_id    deviceId;
-	cl_device_type  deviceType;
-	const char*           deviceTypeString;
-	char*           deviceName;
-} DeviceDesc;
-
 class ClException: public std::exception
 {
 public:
