@@ -2,7 +2,7 @@
 #$ -S /bin/bash
 #$ -P RCSoftDev
 #$ -l h_rt=0:0:30
-#$ -N GPUExample
+#$ -N OpenCLExample
 #$ -l gpu=1
 #$ -wd ${run_at}
 #$ -ac allow="P"
