@@ -6,8 +6,9 @@
 #$ -l gpu=1
 #$ -wd /home/ucgajhe/Scratch/Scaffold/output
 #$ -ac allow="P"
-cp /home/ucgajhe/devel/opencl-scaffold/Legion-Fabric-Scaffold/build/src/*.cl .
-cp /home/ucgajhe/devel/opencl-scaffold/Legion-Fabric-Scaffold/build/src/Model.h .
+mkdir -p src
+cp /home/ucgajhe/devel/opencl-scaffold/Legion-Fabric-Scaffold/build/src/*.cl src
+cp /home/ucgajhe/devel/opencl-scaffold/Legion-Fabric-Scaffold/build/src/Model.h src
 module unload compilers
 module load compilers/gnu/4.9.2
 module load cuda/7.5.18/gnu-4.9.2
