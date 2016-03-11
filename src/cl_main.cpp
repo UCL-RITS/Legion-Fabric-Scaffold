@@ -19,11 +19,11 @@ int main(int argc, char **argv){
   cl_kernel mykernel = b.CreateKernel("map");
   cl_int result;
 
-  cl_uint work_count = b.GetDeviceCores(1);
+  cl_uint work_count = b.GetDeviceCores(0);
 
   // Allocate output buffer on device
 
-  cl_mem outputBuffer = b.AllocateDeviceMemory(CL_MEM_WRITE_ONLY, work_count);
+  cl_mem outputBuffer = b.AllocateDeviceMemory(CL_MEM_WRITE_ONLY, work_count*sizeof(int));
   int results[work_count];
 
   // Bind buffer to kernel argument
@@ -31,7 +31,7 @@ int main(int argc, char **argv){
 
   b.DispatchKernel(mykernel, work_count);
 
-  b.DeviceToHost(outputBuffer, results, work_count);
+  b.DeviceToHost(outputBuffer, results, work_count*sizeof(int));
 
   std::cout << "Final result " << results[10] << std::endl;
 

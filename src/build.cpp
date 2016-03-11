@@ -48,6 +48,7 @@ cl_device_type Builder::GetDeviceType(cl_uint selectedDevice){
 
 cl_uint Builder::GetDeviceCores(cl_uint selectedDevice){
   cl_uint core_count;
+
   result = clGetDeviceInfo(deviceIDs[selectedDevice],
     CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(cl_uint),
     &core_count, NULL);
@@ -140,15 +141,19 @@ cl_program Builder::CreateProgram(const std::string &kernel_path){
 
    std::stringstream buffer;
    buffer << kernel_file.rdbuf() << std::flush;
+   program_buffers.push_back(buffer.str());
 
-   const char * buffer_contents = buffer.str().c_str();
+   const char * buffer_contents = program_buffers.back().c_str();
 
+
+   std::cout << "Creating program: " << kernel_path << std::endl;
    cl_program program = clCreateProgramWithSource(context, 1,
      &buffer_contents, NULL, &result);
    if(result != CL_SUCCESS) exit(8);
    return program;
 
 }
+
 
 void Builder::Program(const std::string &path){
   cl_program program = CreateProgram(path);
@@ -185,31 +190,30 @@ cl_kernel Builder::CreateKernel(const std::string &kernel_name){
                    header_names.end(),
                    headers_buffer.begin(),
                    [](std::string &s) { return s.c_str(); });
-
+    std::cout << "Compiling programs" << std::endl;
     for (auto program: programs) {
       result = clCompileProgram(program, 0, NULL, NULL, headers.size(),
         &headers[0], &headers_buffer[0], NULL, NULL);
 
       if(result != CL_SUCCESS) BuildLog(program);
-
     }
 
-
+    std::cout << "Linking programs" << std::endl;
     cl_program program = clLinkProgram(context, 0, NULL, NULL, programs.size(),
                          &programs[0],
                           NULL, NULL, &result);
     if(result != CL_SUCCESS) BuildLog(program);
-
+    std::cout << "Linked programs" << std::endl;
     cl_kernel chol_gpu;
 
     chol_gpu = clCreateKernel(program, kernel_name.c_str(), &result);
     if(result != CL_SUCCESS) throw ClException(9);
-
+    std::cout << "Created kernel" << std::endl;
     return chol_gpu;
 }
 
 void Builder::DispatchKernel(cl_kernel kernel, size_t work_count){
-
+  std::cout << "Launching kernel" << std::endl;
   cl_event  kernelExecEvent;
 
   result = clEnqueueNDRangeKernel(commands, kernel, 1, NULL, &work_count, NULL,
@@ -235,13 +239,14 @@ cl_double Builder::Profile(cl_event event){
 
 cl_mem Builder::AllocateDeviceMemory(cl_mem_flags flags, size_t count,
   void * source_data){
+    std::cout << "Allocating device memory" << std::endl;
     cl_mem data = clCreateBuffer(context, flags, count, source_data, &result);
     if(result != CL_SUCCESS) throw ClException(11);
     return data;
 }
 
 void Builder::DeviceToHost(cl_mem device_mem, void* host_mem, size_t count){
-
+  std::cout << "Copying from device to host" << std::endl;
   cl_event readResultsEvent;
   clEnqueueReadBuffer(commands, device_mem, CL_TRUE, 0,
     count, host_mem, 0, NULL, &readResultsEvent);

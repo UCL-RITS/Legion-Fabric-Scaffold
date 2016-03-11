@@ -24,7 +24,7 @@ class Builder {
     void DeviceToHost(cl_mem device_mem, void * host_mem, size_t count);
     cl_double Profile(cl_event event);
     void BuildLog(cl_program program);
-
+    virtual ~Builder() {};
   private:
 
     void EnumerateDevices();
@@ -45,4 +45,5 @@ class Builder {
     std::vector<cl_program> programs;
     std::vector<cl_program> headers;
     std::vector<std::string> header_names;
+    std::vector<std::string> program_buffers;
 };
