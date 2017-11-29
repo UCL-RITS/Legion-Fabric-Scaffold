@@ -17,8 +17,6 @@ int main(int argc, char **argv){
 			return Model(threadIdx.x, thread_count).calculate();
 		} );
 
-  thrust::device_vector<int> device_total(1);
-
   host_total = thrust::reduce(results.begin(), results.end(), 0,
 		thrust::plus<int>()
 	);
